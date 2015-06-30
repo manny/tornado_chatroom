@@ -1,3 +1,4 @@
+import os.path
 import logging
 import tornado.ioloop
 import tornado.web
@@ -12,11 +13,23 @@ class MainHandler(tornado.web.RequestHandler):
         logging.info("message served")
         self.write("too far away!")
 
-application = tornado.web.Application([
-    (r"/", MainHandler)], options.debug
-)
+
+def main():
+    parse_command_line()
+    app = tornado.web.Application(
+        [
+            (r"/", MainHandler)
+            ],
+        cookie_secret="Figure this out later",
+        template_path=os.path.join(os.path.dirname(__file__), "templates"),
+        static_path=os.path.join(os.path.dirname(__file__), "static"),
+        xsfr_cookies=True,
+        debug = options.debug,
+    )
+
+    tornado.options.parse_command_line()
+    app.listen(options.port)
+    tornado.ioloop.IOLoop.instance().start()
 
 if __name__ == "__main__":
-    tornado.options.parse_command_line()
-    application.listen(options.port)
-    tornado.ioloop.IOLoop.instance().start()
+    main()
