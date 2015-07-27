@@ -14,7 +14,7 @@ define ("debug", default=False, help="run in debug mode")
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         logging.info("message served")
-        self.write("too far away!")
+        self.render("index.html")
 
 
 def main():
